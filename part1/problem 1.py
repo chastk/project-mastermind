@@ -1,5 +1,6 @@
 #python 2.7.6
 import os
+import re
 
 ## a global variable used to store the sum of path, size and counts for each directory
 storeArray = []
@@ -47,7 +48,8 @@ def countUse(fileName, keyword):
         # trim single comment line
         commentSingle = line.find('//')
         line = line[:commentSingle]
-        wordArray = line.split()
+        # split on all charters that are not letters
+        wordArray = re.split('(\W+)', line)
         for w in wordArray:
             # check if the word is comment or not
             commentMultipleBegin = w.find('/*')
@@ -59,7 +61,7 @@ def countUse(fileName, keyword):
                 w= w[commentMultipleEnd:]
                 isComment = False
             # count when keyword is found and is not comment
-            if isComment == False and w.find(keyword) != -1:
+            if isComment == False and w == keyword:
                 count += 1     
     fo.close()
     return count
